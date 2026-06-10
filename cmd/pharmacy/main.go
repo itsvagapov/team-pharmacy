@@ -17,11 +17,7 @@ func main() {
 
 	router := gin.Default()
 
-	router.GET("/ping", func(ctx *gin.Context) {
-		ctx.String(200, "pong")
-	})
-
-	transport.RegisterRoutes(router)
+	transport.RegisterRoutes(router, db)
 
 	if err := router.Run(); err != nil {
 		log.Fatalf("не удалось запустить HTTP-сервер: %v", err)
