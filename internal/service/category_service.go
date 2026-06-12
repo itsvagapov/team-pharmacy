@@ -17,12 +17,12 @@ type CategoryService interface {
 }
 
 type categoryService struct {
-	repo repository.CategoryRepository
+	categories repository.CategoryRepository
 }
 
-func NewCategoryService(repo repository.CategoryRepository) CategoryService {
+func NewCategoryService(categories repository.CategoryRepository) CategoryService {
 	return &categoryService{
-		repo: repo,
+		categories: categories,
 	}
 }
 
@@ -35,7 +35,7 @@ func (s *categoryService) CreateCategory(req models.CategoryCreateRequest) (*mod
 		Name: req.Name,
 	}
 
-	if err := s.repo.Create(category); err != nil {
+	if err := s.categories.Create(category); err != nil {
 		return nil, err
 	}
 
@@ -43,7 +43,7 @@ func (s *categoryService) CreateCategory(req models.CategoryCreateRequest) (*mod
 }
 
 func (s *categoryService) GetAllCategories() ([]models.Category, error) {
-	categories, err := s.repo.GetAll()
+	categories, err := s.categories.GetAll()
 	if err != nil {
 		return nil, err
 	}

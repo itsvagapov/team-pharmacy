@@ -17,6 +17,14 @@ func NewCategoryHandler(service service.CategoryService) *CategoryHandler {
 	return &CategoryHandler{service: service}
 }
 
+func (h *CategoryHandler) RegisterRoutes(r *gin.Engine) {
+	categories := r.Group("/categories")
+	{
+	categories.GET("", h.GetAllCategories)
+	categories.POST("", h.CreateCategory)
+	}
+}
+
 func (h *CategoryHandler) CreateCategory(c *gin.Context) {
 	var req models.CategoryCreateRequest
 

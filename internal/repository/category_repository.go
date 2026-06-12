@@ -11,6 +11,8 @@ type CategoryRepository interface {
 	Create(category *models.Category) error
 
 	GetAll() ([]models.Category, error)
+
+	GetByID(id uint) (*models.Category, error)
 }
 
 type gormCategoryRepository struct {
@@ -38,4 +40,18 @@ func (r *gormCategoryRepository) GetAll() ([]models.Category, error) {
 	}
 
 	return categories, nil
+}
+
+
+func (r *gormCategoryRepository) GetByID(id uint) (*models.Category, error) {
+	var category models.Category
+
+	if err := r.db.First(&category, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &category, nil
 }

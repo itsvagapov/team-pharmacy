@@ -4,7 +4,7 @@ type Subcategory struct {
 	ID         uint   `gorm:"primaryKey" json:"id"`
 	CategoryID uint   `json:"category_id"`
 	Name       string `json:"name"`
-	Category Category
+	Category Category `json:"-"`
 }
 
 type SubcategoryCreateRequest struct {
