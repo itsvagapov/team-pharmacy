@@ -11,8 +11,6 @@ type UserRepository interface {
 	Create(user *models.User) (*models.User, error)
 	GetByID(id uint) (*models.User, error)
 	GetByEmail(email string) (*models.User, error)
-	Update(user *models.User) error
-	Delete(id uint) error
 }
 
 type userRepository struct {
@@ -24,8 +22,15 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 }
 
 func (r *userRepository) Create(user *models.User) (*models.User, error) {
+	if user == nil{
+		return nil, errors.New("user is nil")
+	}
 	err := r.db.Create(user).Error
-	return user, err
+	if err != nil{
+		return nil, err
+	}
+	
+	return user, nil
 }
 
 func (r *userRepository) GetByID(id uint) (*models.User, error) {
@@ -42,15 +47,9 @@ func (r *userRepository) GetByEmail(email string) (*models.User, error) {
 
 	err := r.db.Where("email = ?", email).First(&user).Error
 	if err != nil {
-		return nil, errors.New("Нет пользователя с таким email")
+		return nil, err
 	}
-	return &user, err
+	return &user, nil
 }
 
-func (r *userRepository) Update(user *models.User) error {
-	return nil
-}
 
-func (r *userRepository) Delete(id uint) error {
-	return nil
-}

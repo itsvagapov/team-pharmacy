@@ -16,4 +16,22 @@ func RegisterRoutes(router *gin.Engine, db *gorm.DB) {
 
 	router.POST("/categories", categoryHandler.CreateCategory)
 	router.GET("/categories", categoryHandler.GetAllCategories)
+
+	///
+
 }
+
+func RegisterUserRoutes(router *gin.Engine, userService service.UserService) {
+
+	userHandler := NewUserHandler(userService)
+
+	userHandler.RegisterRoutes(router)
+}
+
+///
+// userRepo := repository.NewUserRepository(db)
+// userService := service.NewUserService(userRepo)
+// userHandler := NewUserHandler(userService)
+
+// router.POST("/users", userHandler.Register)
+// router.GET("/users/:id", userHandler.GetByID)

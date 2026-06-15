@@ -11,20 +11,22 @@ type UserService interface {
 	Create(userReq *models.UserCreate) error
 	GetById(id uint) (*models.User, error)
 	GetByEmail(email string) (*models.User, error)
-	Update(user *models.User) error
-	Delete(id uint) error
 }
 
 type userService struct {
 	userRepo repository.UserRepository
+}	
+
+func NewUserService(userRepo repository.UserRepository) UserService{
+	return &userService{userRepo: userRepo}
 }
 
 func (s *userService) Create(userReq *models.UserCreate) error {
 
 	//проверка email
-	existingUser, err := s.userRepo.GetByEmail(userReq.Email)
+	existingUser, _ := s.userRepo.GetByEmail(userReq.Email)
 	if existingUser != nil{
-		return nil,errors.New("email already exists")
+		return errors.New("email already exists")
 	}
 
 	user := &models.User{
@@ -34,11 +36,20 @@ func (s *userService) Create(userReq *models.UserCreate) error {
 		DefaultAdress: userReq.DefaultAdress,
 	}
 
-	err := s.userRepo.Create(user)
+	_, err := s.userRepo.Create(user)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func (s *userService) GetById(id uint) (*models.User,error) {
+
+	return s.userRepo.GetByID(id)
+}
+
+func (s *userService) GetByEmail(email string) (*models.User, error){
+	return nil,nil
 }
 
 
