@@ -12,7 +12,5 @@ func RegisterRoutes(router *gin.Engine, categoryService service.CategoryService,
 
 	categoryHandler.RegisterRoutes(router)
 	subcategoryHandler.RegisterRoutes(router)
-	
 	userHandler.RegisterRoutes(router)
-
 }
