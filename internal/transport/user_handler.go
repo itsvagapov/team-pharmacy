@@ -25,22 +25,23 @@ func (h *UserHandler) RegisterRoutes(r *gin.Engine) {
 	}
 }
 
-
 func (h *UserHandler) Register(c *gin.Context) {
-	var req *models.UserCreate
+	var req *models.UserCreateRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"err": "Неверный формат запроса",	
+			"error": "Неверный формат запроса",	
 		})
+		return
 	}
 
-	err := h.userService.Create(req)
+	user, err := h.userService.Create(req)
 	if err != nil {
 		if err.Error() == "email already exists" {
 			c.JSON(http.StatusConflict, gin.H{
 				"error": "Пользователь с таким email уже существует",
 			})
+			return
 		}
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Внутренняя ошибка сервера"})
 		return
@@ -48,8 +49,8 @@ func (h *UserHandler) Register(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "Пользователь успешно зарегистрирован",
+		"data": user,
 	})
-
 }
 
 

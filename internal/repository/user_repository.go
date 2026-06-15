@@ -8,7 +8,7 @@ import (
 )
 
 type UserRepository interface {
-	Create(user *models.User) (*models.User, error)
+	Create(user *models.User) error
 	GetByID(id uint) (*models.User, error)
 	GetByEmail(email string) (*models.User, error)
 }
@@ -21,16 +21,16 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 	return &userRepository{db: db}
 }
 
-func (r *userRepository) Create(user *models.User) (*models.User, error) {
+func (r *userRepository) Create(user *models.User) error {
 	if user == nil{
-		return nil, errors.New("user is nil")
+		return errors.New("user is nil")
 	}
 	err := r.db.Create(user).Error
 	if err != nil{
-		return nil, err
+		return err
 	}
 	
-	return user, nil
+	return nil
 }
 
 func (r *userRepository) GetByID(id uint) (*models.User, error) {
@@ -44,11 +44,14 @@ func (r *userRepository) GetByID(id uint) (*models.User, error) {
 
 func (r *userRepository) GetByEmail(email string) (*models.User, error) {
 	var user models.User
-
+	
+	// Ищем первую запись, где email совпадает
 	err := r.db.Where("email = ?", email).First(&user).Error
 	if err != nil {
-		return nil, err
+		// Возвращаем nil и саму ошибку (GORM вернет gorm.ErrRecordNotFound, если юзера нет)
+		return nil, err 
 	}
+	
 	return &user, nil
 }
 

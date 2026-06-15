@@ -7,11 +7,11 @@ type User struct {
 	FullName string `json:"full_name" `
 	Email    string `json:"email" `
 	Phone    string `json:"phone" `
-	DefaultAdress string `json:"default_adress"`
+	DefaultAddress string `json:"default_adress"`
 	
 }
 
-type UserCreate struct {
+type UserCreateRequest struct {
 	FullName string `json:"full_name" binding:"required"`
 	Email    string `json:"email" binding:"required,email"`
 	Phone    string `json:"phone" binding:"required"`
