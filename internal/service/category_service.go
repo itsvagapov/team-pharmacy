@@ -12,7 +12,6 @@ var ErrCategoryNameRequired = errors.New("имя не может быть пус
 
 type CategoryService interface {
 	CreateCategory(req models.CategoryCreateRequest) (*models.Category, error)
-
 	GetAllCategories() ([]models.Category, error)
 }
 

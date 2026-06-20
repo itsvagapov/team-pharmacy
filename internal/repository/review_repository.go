@@ -9,15 +9,10 @@ import (
 
 type ReviewRepository interface {
 	Create(review *models.Review) error
-
 	GetByID(id uint) (*models.Review, error)
-
 	GetByMedicineID(medicineID uint) ([]models.Review, error)
-
 	Update(review *models.Review) error
-
 	Delete(id uint) error
-
 	GetAverageRatingByMedicineID(medicineID uint) (float64, error)
 }
 

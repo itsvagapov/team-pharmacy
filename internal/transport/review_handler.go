@@ -35,9 +35,11 @@ func (h *ReviewHandler) RegisterRoutes(r *gin.Engine) {
 func (h *ReviewHandler) CreateReview(c *gin.Context) {
 	var req models.ReviewCreateRequest
 
-	medicineID, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid medicine id"})
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil || id <= 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "invalid medicine id",
+		})
 		return
 	}
 
@@ -46,11 +48,13 @@ func (h *ReviewHandler) CreateReview(c *gin.Context) {
 		return
 	}
 
-	review, err := h.service.CreateReview(uint(medicineID), req)
+	review, err := h.service.CreateReview(uint(id), req)
 	if err != nil {
 		if errors.Is(err, service.ErrRatingOutOfRange) ||
 			errors.Is(err, service.ErrReviewTextRequired) {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
 			return
 		}
 
@@ -62,13 +66,15 @@ func (h *ReviewHandler) CreateReview(c *gin.Context) {
 }
 
 func (h *ReviewHandler) GetReviewsByMedicineID(c *gin.Context) {
-	medicineID, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid medicine id"})
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil || id <= 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "invalid medicine id",
+		})
 		return
 	}
 
-	reviews, err := h.service.GetReviewsByMedicineID(uint(medicineID))
+	reviews, err := h.service.GetReviewsByMedicineID(uint(id))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -81,28 +87,38 @@ func (h *ReviewHandler) UpdateReview(c *gin.Context) {
 	var req models.ReviewUpdateRequest
 
 	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid review id"})
+	if err != nil || id <= 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "invalid review id",
+		})
 		return
 	}
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
 		return
 	}
 
 	review, err := h.service.UpdateReview(uint(id), req)
 	if err != nil {
 		if errors.Is(err, service.ErrReviewNotFound) {
-			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			c.JSON(http.StatusNotFound, gin.H{
+				"error": err.Error(),
+			})
 			return
 		}
 		if errors.Is(err, service.ErrReviewTextRequired) {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
 			return
 		}
 
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
 		return
 	}
 
@@ -111,20 +127,28 @@ func (h *ReviewHandler) UpdateReview(c *gin.Context) {
 
 func (h *ReviewHandler) DeleteReview(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid review id"})
+	if err != nil || id <= 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "invalid review id",
+		})
 		return
 	}
 
 	if err := h.service.DeleteReview(uint(id)); err != nil {
 		if errors.Is(err, service.ErrReviewNotFound) {
-			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			c.JSON(http.StatusNotFound, gin.H{
+				"error": err.Error(),
+			})
 			return
 		}
 
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "deleted"})
+	c.JSON(http.StatusOK, gin.H{
+		"message": "deleted",
+	})
 }

@@ -20,8 +20,8 @@ func NewCategoryHandler(service service.CategoryService) *CategoryHandler {
 func (h *CategoryHandler) RegisterRoutes(r *gin.Engine) {
 	categories := r.Group("/categories")
 	{
-	categories.GET("", h.GetAllCategories)
-	categories.POST("", h.CreateCategory)
+		categories.GET("", h.GetAllCategories)
+		categories.POST("", h.CreateCategory)
 	}
 }
 

@@ -33,12 +33,13 @@ func NewReviewService(reviews repository.ReviewRepository) ReviewService {
 }
 
 func (s *reviewService) CreateReview(medicineID uint, req models.ReviewCreateRequest) (*models.Review, error) {
-
 	if req.Rating < 1 || req.Rating > 5 {
 		return nil, ErrRatingOutOfRange
 	}
 
-	if strings.TrimSpace(req.Text) == "" {
+	reqTextTrimmed := strings.TrimSpace(req.Text)
+
+	if reqTextTrimmed == "" {
 		return nil, ErrReviewTextRequired
 	}
 
@@ -46,7 +47,7 @@ func (s *reviewService) CreateReview(medicineID uint, req models.ReviewCreateReq
 		UserID:     req.UserID,
 		MedicineID: medicineID,
 		Rating:     req.Rating,
-		Text:       strings.TrimSpace(req.Text),
+		Text:       reqTextTrimmed,
 	}
 
 	if err := s.reviews.Create(review); err != nil {
@@ -57,7 +58,6 @@ func (s *reviewService) CreateReview(medicineID uint, req models.ReviewCreateReq
 }
 
 func (s *reviewService) GetReviewsByMedicineID(medicineID uint) ([]models.Review, error) {
-
 	reviews, err := s.reviews.GetByMedicineID(medicineID)
 	if err != nil {
 		return nil, err
@@ -67,7 +67,6 @@ func (s *reviewService) GetReviewsByMedicineID(medicineID uint) ([]models.Review
 }
 
 func (s *reviewService) UpdateReview(id uint, req models.ReviewUpdateRequest) (*models.Review, error) {
-
 	review, err := s.reviews.GetByID(id)
 	if err != nil {
 		return nil, err

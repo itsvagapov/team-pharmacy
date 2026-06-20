@@ -18,12 +18,12 @@ type SubcategoryService interface {
 
 type subcategoryService struct {
 	subcategories repository.SubcategoryRepository
-	categories repository.CategoryRepository
+	categories    repository.CategoryRepository
 }
 
 func NewSubcategoryService(subcategories repository.SubcategoryRepository, categories repository.CategoryRepository) SubcategoryService {
-	return &subcategoryService {
-		categories: categories,
+	return &subcategoryService{
+		categories:    categories,
 		subcategories: subcategories,
 	}
 }

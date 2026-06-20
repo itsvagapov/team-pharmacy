@@ -12,6 +12,9 @@ type Medicine struct {
 	Manufacturer         string  `json:"manufacturer"`
 	PrescriptionRequired bool    `json:"prescription_required"`
 	AvgRating            float64 `json:"avg_rating"`
+
+	Category    Category    `json:"-"`
+	Subcategory Subcategory `json:"-"`
 }
 
 type MedicineCreateRequest struct {
@@ -27,14 +30,14 @@ type MedicineCreateRequest struct {
 }
 
 type MedicineUpdateRequest struct {
-	Price         *float64
-	InStock       *bool
-	StockQuantity *int
+	Price         *float64 `json:"price"`
+	InStock       *bool    `json:"in_stock"`
+	StockQuantity *int     `json:"stock_quantity"`
 }
 
 type MedicineFilter struct {
-	Search        string
-	CategoryID    *uint
-	SubcategoryID *uint
-	InStock       *bool
+	Search        string `form:"search"`
+	CategoryID    *uint  `form:"category_id"`
+	SubcategoryID *uint  `form:"subcategory_id"`
+	InStock       *bool  `form:"in_stock"`
 }

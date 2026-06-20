@@ -21,8 +21,8 @@ func NewSubcategoryHandler(service service.SubcategoryService) *SubcategoryHandl
 func (h *SubcategoryHandler) RegisterRoutes(r *gin.Engine) {
 	subcategories := r.Group("/categories")
 	{
-	subcategories.GET("/:id/subcategories", h.GetSubcategoriesByCategoryID)
-	subcategories.POST("/:id/subcategories", h.CreateSubcategory)
+		subcategories.GET("/:id/subcategories", h.GetSubcategoriesByCategoryID)
+		subcategories.POST("/:id/subcategories", h.CreateSubcategory)
 	}
 }
 

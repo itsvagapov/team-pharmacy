@@ -9,9 +9,7 @@ import (
 
 type CategoryRepository interface {
 	Create(category *models.Category) error
-
 	GetAll() ([]models.Category, error)
-
 	GetByID(id uint) (*models.Category, error)
 }
 
@@ -41,7 +39,6 @@ func (r *gormCategoryRepository) GetAll() ([]models.Category, error) {
 
 	return categories, nil
 }
-
 
 func (r *gormCategoryRepository) GetByID(id uint) (*models.Category, error) {
 	var category models.Category
