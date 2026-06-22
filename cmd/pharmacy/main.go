@@ -25,7 +25,7 @@ func main() {
 
 	categoryService := service.NewCategoryService(categoryRepo)
 	subcategoryService := service.NewSubcategoryService(subcategoryRepo, categoryRepo)
-	reviewService := service.NewReviewService(reviewRepo)
+	reviewService := service.NewReviewService(reviewRepo, medicineRepo)
 	medicineService := service.NewMedicineService(medicineRepo, categoryRepo, subcategoryRepo)
 
 	router := gin.Default()

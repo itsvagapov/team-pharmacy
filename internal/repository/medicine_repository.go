@@ -103,5 +103,3 @@ func (r *gormMedicineRepository) Delete(id uint) error {
 func (r *gormMedicineRepository) UpdateAvgRating(id uint, avgRating float64) error {
 	return r.db.Model(&models.Medicine{}).Where("id = ?", id).Update("avg_rating", avgRating).Error
 }
-
-
